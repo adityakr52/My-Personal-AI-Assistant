@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#35170f">
+<title>TARKA - Personal AI</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;color:#fff0dc;
+ font-family:Arial,sans-serif;
+ background:radial-gradient(ellipse at 50% 45%,#8b351c 0%,#431b13 48%,#160d12 100%);
+ overflow-x:hidden
+}
+.stars{
+ position:fixed;inset:0;pointer-events:none;opacity:.65;
+ background-image:
+ radial-gradient(2px 2px at 20% 20%,#ffd7a0 99%,transparent),
+ radial-gradient(2px 2px at 75% 15%,#fff 99%,transparent),
+ radial-gradient(2px 2px at 85% 60%,#ffb36b 99%,transparent),
+ radial-gradient(1px 1px at 35% 75%,#fff 99%,transparent),
+ radial-gradient(2px 2px at 12% 55%,#ffb36b 99%,transparent);
+ background-size:190px 180px
+}
+header{
+ display:flex;justify-content:space-between;align-items:center;
+ padding:22px 20px
+}
+.round{
+ width:45px;height:45px;border:1px solid #d98a52;
+ border-radius:50%;background:#542516;color:#ffe4c2;
+ font-size:22px
+}
+.brand{text-align:center;margin-top:12px}
+.brand h1{
+ font-size:48px;letter-spacing:10px;margin:0;
+ color:#ffe2bd;text-shadow:0 0 20px #ff9b48
+}
+.brand p{color:#e9b58b;margin:8px}
+main{max-width:520px;margin:auto;padding:15px 22px 30px;text-align:center}
+.greeting{margin:42px 0 25px}
+.greeting h2{font-size:30px;color:#ffca91;margin:0 0 12px}
+.greeting p{font-size:17px;color:#f5d8bc}
+.orbit{
+ width:210px;height:210px;margin:35px auto 18px;
+ border:2px solid #ff9a4b;border-radius:50%;
+ display:grid;place-items:center;
+ box-shadow:0 0 25px #e66b28, inset 0 0 25px #9b3b1e;
+ position:relative
+}
+.orbit:before{
+ content:"";position:absolute;width:245px;height:90px;
+ border:1px solid #e99a58;border-radius:50%;transform:rotate(-25deg)
+}
+.mic{
+ width:145px;height:145px;border-radius:50%;
+ border:2px solid #ffc17c;background:radial-gradient(#8b351c,#30130f);
+ color:#fff0dc;font-size:55px;cursor:pointer;
+ box-shadow:0 0 25px #ff8a3d
+}
+.hint{color:#ffd2a5;margin:12px}
+.inputrow{
+ display:flex;gap:8px;margin:28px 0 22px;
+ padding:8px;border:1px solid #d98a52;
+ border-radius:35px;background:#31140f
+}
+input{
+ flex:1;min-width:0;background:transparent;border:0;
+ outline:0;color:white;padding:12px;font-size:15px
+}
+.send{
+ border:0;border-radius:50%;width:45px;height:45px;
+ background:#f07828;color:white;font-size:20px
+}
+.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:25px}
+.nav button{
+ padding:16px 4px;border:1px solid #b96b3c;
+ border-radius:17px;background:#492015;color:#ffe1c4;font-size:14px
+}
+.nav span{display:block;font-size:23px;margin-bottom:8px}
+#reply{
+ min-height:25px;color:#ffdcba;margin:15px 0;
+ line-height:1.5
+}
+footer{margin:35px 0 10px;color:#dba276;letter-spacing:3px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<header>
+<button class="round" onclick="alert('TARKA Menu')">☰</button>
+<button class="round" onclick="alert('Settings')">⚙</button>
+</header>
+<div class="brand">
+<h1>TARKA</h1>
+<p>YOUR PERSONAL AI ASSISTANT</p>
+</div>
+<main>
+<section class="greeting">
+<h2>नमस्ते!</h2>
+<p>मैं हूँ TARKA, आपकी क्या सहायता करूँ?</p>
+</section>
+<div class="orbit">
+<button class="mic" onclick="listen()">🎙</button>
+</div>
+<p class="hint" id="hint">बोलकर पूछें...</p>
+<div class="inputrow">
+<input id="question" placeholder="यहाँ अपना सवाल लिखें...">
+<button class="send" onclick="sendMessage()">➤</button>
+</div>
+<div id="reply">आपका स्वागत है! कुछ भी पूछिए।</div>
+<div class="nav">
+<button onclick="show('Chat')"><span>▤</span>Chat</button>
+<button onclick="show('Voice')"><span>🎧</span>Voice</button>
+<button onclick="show('Tools')"><span>▦</span>Tools</button>
+<button onclick="show('About')"><span>ⓘ</span>About</button>
+</div>
+<footer>THINK ✦ ASK ✦ EXPLORE</footer>
+</main>
+<script>
+function sendMessage(){
+ const q=document.getElementById('question');
+ if(!q.value.trim())return;
+ document.getElementById('reply').textContent='आपने पूछा: '+q.value+' — AI Chat अगली अपडेट में जोड़ा जाएगा।';
+ q.value='';
+}
+function show(name){
+ document.getElementById('reply').textContent=name+' सेक्शन जल्द तैयार होगा।';
+}
+function listen(){
+ const hint=document.getElementById('hint');
+ const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!Speech){
+  hint.textContent='इस ब्राउज़र में Voice Recognition उपलब्ध नहीं है।';
+  return;
+ }
+ const rec=new Speech();
+ rec.lang='hi-IN';
+ hint.textContent='सुन रहा हूँ...';
+ rec.onresult=e=>{
+  document.getElementById('question').value=e.results[0][0].transcript;
+  hint.textContent='आपकी आवाज़ पहचान ली गई।';
+ };
+ rec.onerror=()=>hint.textContent='दोबारा कोशिश करें।';
+ rec.start();
+}
+</script>
+</body>
+</html>
